@@ -54,26 +54,16 @@ public:
     // // 字符串反转算法
     // int reverse(int x) {
     //     int nRes = 0;
-
-    //     // 33位bit数组， 第0-30(31)位存储x的绝对值
-    //     // 31，32位 双符号位 保存正负 00 位正 11为负，
-    //     // 如果翻转后溢出，那么检测符号位变话了，就溢出了，返回0
     //     string origin_x = std::to_string(std::abs(x));
     //     std::reverse(origin_x.begin(), origin_x.end());
     //     unsigned long ul = 0;
     //     ul = strtoul(origin_x.c_str(), NULL, 10);
     //     std::bitset<64> b64(ul);
-
+    //     // 64位的bit, 第32位一直到63位，有一位为1，则为溢出
     //     for (size_t i = 31; i < b64.size(); i++)
     //     {
     //         if (b64.test(i))
     //             return nRes;
-    //     }
-
-    //     if (b64.test(31) || b64.test(32))
-    //     {
-    //         // 溢出
-    //         return nRes;
     //     }
     //     if(x < 0)
     //     {
@@ -85,11 +75,10 @@ public:
     //     return nRes;
     // }
 
-    int reverse(int x) {
+    int reverse_2(int x) {
         int nRes = 0;
         int abs_x = std::abs(x);
         std::queue<int> queue_x;
-        cout << "开始压栈";
         while(abs_x/10 != 0 || abs_x%10 !=0)
         {
             int temp = abs_x%10;
@@ -97,7 +86,6 @@ public:
             abs_x = abs_x/10;
             cout << temp;
         }
-        cout << "压栈结束";
         unsigned long ul = 0;
         unsigned long i = 0;
         while (queue_x.size() != 0)
@@ -117,12 +105,6 @@ public:
             if (b64.test(i))
                 return nRes;
         }
-
-        if (b64.test(31) || b64.test(32))
-        {
-            // 溢出
-            return nRes;
-        }
         if(x < 0)
         {
             nRes = -ul;
@@ -132,6 +114,46 @@ public:
         }
         return nRes;
     }
+
+    // 改进判断溢出的方法；溢出判断：base > INT_MAX / 10 || (base == INT_MAX / 10 && str[i] - '0' > 7)
+    // 第一个条件： base>INT_MAX/10,则为溢出； 为啥不是base*10>INT_MAX?
+    // base*10 如果溢出了，也回出现base*10 < INT_MAX；高位已经溢出，剩余的就是比INT_MAX小
+    // 第二个条件： INT_MAX = 2147483647  当base == INT_MAX / 10，要多判断最后一位是否大于7，大于7则溢出
+    int reverse(int x) {
+        int nRes = 0;
+        int abs_x = std::abs(x);
+        std::queue<int> queue_x;
+        // 队列存储 从个位数开始存
+        while(abs_x/10 != 0 || abs_x%10 !=0)
+        {
+            int temp = abs_x%10;
+            queue_x.push(temp);
+            abs_x = abs_x/10;
+            cout << temp;
+        }
+        unsigned long i = 0;
+        int base = 0;
+        while (queue_x.size() != 0)
+        {
+            int temp = queue_x.front();
+            if(base > INT_MAX /10 || (base == INT_MAX / 10 && temp > 7))
+            {
+                return nRes;
+            }
+            base = base*10 + temp;
+            queue_x.pop();
+        }
+
+        if(x < 0)
+        {
+            nRes = -base;
+        }else
+        {
+            nRes = base;
+        }
+        return nRes;
+    }
+
 };
 
 
@@ -143,4 +165,3 @@ public:
 //     cout << b << endl;
 // }
 // @lc code=end
-
