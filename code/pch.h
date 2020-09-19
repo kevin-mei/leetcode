@@ -9,6 +9,7 @@
 #include <iterator>
 #include <regex>
 #include <map>
+#include <numeric>
 
 using namespace std;
 
