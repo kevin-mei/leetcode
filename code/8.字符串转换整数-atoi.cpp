@@ -76,11 +76,98 @@
  */
 
 // @lc code=start
+//#include "pch.h"
+
 class Solution {
 public:
-    int myAtoi(string str) {
+
+    // 字符char 在0-9借助正则判断，有点复杂
+    int myAtoi_1(string str) {
+        if(0 == str.size())
+        {
+            return 0;
+        }
+        int i = 0;
+        // 判断空格 字母
+        string ch(1, str[i]);
         
+        std::regex eng_regex("[a-zA-Z]");
+        while(i < str.size() && ' ' == str[i])
+        {
+            i++;
+        }
+        // 判断正负号  出现两个以上的符号位，无论正负，均返回0
+        bool sign = true;
+        int num =0;
+        while(i < str.size() && (str[i] == '+' || str[i] == '-'))
+        {
+            sign = (str[i++] == '+') ? true: false;
+            if(num>0)
+            {
+                return 0;
+            }
+            num++;
+        }
+        std::regex num_regex("[0-9]");
+        int base = 0;
+        while(i < str.size() && std::regex_match(ch.assign(1, str[i]), num_regex))
+        {
+            if (base > INT_MAX / 10 || (base == INT_MAX / 10 && str[i] - '0' > 7)) {
+                return sign ? INT_MAX : INT_MIN;
+            }
+            base = base*10 + ((int)(str[i] - '0'));
+            i++;
+        }
+
+        return sign?base:-base;
+    }
+
+    // 改进 字符 在0-9之间的判断，直接  ch>='0' && ch<='9' 即可
+    int myAtoi(string str) {
+        if(0 == str.size())
+        {
+            return 0;
+        }
+        int i = 0;
+        while(i < str.size() && ' ' == str[i])
+        {
+            i++;
+        }
+        // 判断正负号  出现两个以上的符号位，无论正负，均返回0
+        bool sign = true;
+        int num =0;
+        while(i < str.size() && (str[i] == '+' || str[i] == '-'))
+        {
+            sign = (str[i++] == '+') ? true: false;
+            if(num>0)
+            {
+                return 0;
+            }
+            num++;
+        }
+        int base = 0;
+        while(i < str.size() && str[i]>='0' && str[i]<='9')
+        {
+            // INT_MAX = 2147483647  当base == INT_MAX / 10，要多判断最后一位是否大于7，大于7则溢出
+            if (base > INT_MAX / 10 || (base == INT_MAX / 10 && str[i] - '0' > 7)) {
+                return sign ? __INT_MAX__ : INT_MIN;
+            }
+            base = base*10 + ((int)(str[i] - '0'));
+            i++;
+        }
+
+        return sign?base:-base;
     }
 };
+
+// int main()
+// {
+//     string str = "-91283472332";
+//     //int num = ((int)str[1]);
+//     Solution sol;
+//     int res = sol.myAtoi(str);
+//     cout << res << endl;
+//     return 0;
+// }
 // @lc code=end
 

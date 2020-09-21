@@ -48,7 +48,7 @@
  */
 
 // @lc code=start
-// #include "pch.h"
+#include "pch.h"
 class Solution {
 public:
     string convert(string s, int numRows) {
@@ -82,13 +82,13 @@ public:
     }
 };
 
-// int main()
-// {
-//     string s("ab");
-//     Solution sol;
-//     string res = sol.convert(s, 1);
-//     std::cout << res << std::endl;
-//     return 0;
-// }
+int main()
+{
+    string s("ab");
+    Solution sol;
+    string res = sol.convert(s, 1);
+    std::cout << res << std::endl;
+    return 0;
+}
 // @lc code=end
 
