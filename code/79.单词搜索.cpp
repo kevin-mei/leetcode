@@ -92,7 +92,7 @@ public:
         for(pair<int,int> director : directors)
         {
             int new_i = i+ director.first, new_j = j+director.second;
-            // 判断新坐标的合法性 且visited[new_i][new_i]没有被访问过
+            // 判断新坐标的合法性
             if(new_i >= 0 && new_i < board.size() && new_j >= 0 && new_j < board[0].size())
             {
                 res = check(board, visited, word, new_i, new_j, k+1);

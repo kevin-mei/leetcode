@@ -53,10 +53,10 @@ public:
 
     vector<int> twoSum(vector<int>& nums, int target) {
         // 用额外n的空间存储target - nums[i] 的差值
-        // map_data 保存 (差值，下标) 数组元素有可能相同，就会有相同的差值，这时候i覆盖
-        // 题中说只有一个正确答案，这时候i覆盖的情况，也不会是正确答案，如果是，则不只答案了
+        // map_data 保存 <差值，下标> 数组元素有可能相同，就会有相同的差值，这时候i覆盖
+        // 题中说只有一个正确答案，这时候i覆盖的情况，也不会是正确答案，如果是，则不只一个答案了
         std::unordered_map<int,int> map_data;
-        // 遍历一边，一边判断当前nums[i]是否在map_data的keys中能找到，能找到说明是正确答案，找到对应value，就是上一个数的下标
+        // 遍历一遍，一边判断当前nums[i]是否在map_data的keys中能找到，能找到说明是正确答案，找到对应value，就是上一个数的下标
         // 没找到就map_data[差值] = i;把<差值，下标>保存到map中
         vector<int> res;
         for(int i=0; i < nums.size();i++)
