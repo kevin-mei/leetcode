@@ -10,7 +10,7 @@
 class Solution
 {
 public:
-    int maxSubArray(vector<int> &nums)
+    int maxSubArray_1(vector<int> &nums)
     {
         // 分治法
         // 求nums中的最大元素
@@ -40,7 +40,7 @@ public:
                 }
                 if (*cur_left > 0 && *cur_right > 0 && cur_left <= cur_right)
                 {
-                    printf("cur_left = %d cur_right = %d \n", *cur_left, *cur_right);
+                    //printf("cur_left = %d cur_right = %d \n", *cur_left, *cur_right);
                     //int sum = std::accumulate(v.begin(), v.end(), 0); // 指定元素求和,区间[v.begin(), v.end())  // 0为init值 可以叠加
                     if (nums.end() == last_left && nums.end() == last_right)
                     {
@@ -80,7 +80,7 @@ public:
                         }
                     }
                     int temp = std::accumulate(last_left, last_right + 1, 0);
-                    printf("last_left = %d last_right = %d sum = %d\n", *last_left, *last_right, temp);
+                    //printf("last_left = %d last_right = %d sum = %d\n", *last_left, *last_right, temp);
                     if (temp > res_max)
                     {
                         res_max = temp;
@@ -126,33 +126,38 @@ public:
         return res_max;
     }
 
-    int maxSubArray_2(vector<int>& nums) {
-        int sum = 0, smax = INT_MIN;
-        for (int num : nums) {
-            sum += num;
-            smax = max(smax, sum);
-            if (sum < 0) {
-                sum = 0;
-            }
-        }
-        return smax;
-    }
+    // 连续子数组的最大和
+    // 一个for循环处理
+    // 从第一个开始加，然后和最大值比较，如果新加的比最大值大，则更新最大值
+    // 如果值为负数，那累计的sum应重置为0，这时候不能更新smax，因为子数组不能为空
+    // int maxSubArray(vector<int>& nums) {
+    //     int sum = 0, smax = INT_MIN;
+    //     for (int num : nums) {
+    //         sum += num;
+    //         smax = max(smax, sum);
+    //         if (sum < 0) {
+    //             sum = 0;
+    //         }
+    //     }
+    //     return smax;
+    // }
 
-    int maxSubArray_3(vector<int> &nums)
+
+    int maxSubArray(vector<int> &nums)
     {
-        return maxSubArray(nums, 0, nums.size() - 1);
+        return maxSubArrayHelp(nums, 0, nums.size() - 1);
     }
 
 private:
-    int maxSubArray(vector<int> &nums, int l, int r)
+    int maxSubArrayHelp(vector<int> &nums, int l, int r)
     {
         if (l > r)
         {
             return INT_MIN;
         }
         int m = l + (r - l) / 2, ml = 0, mr = 0;
-        int lmax = maxSubArray(nums, l, m - 1);
-        int rmax = maxSubArray(nums, m + 1, r);
+        int lmax = maxSubArrayHelp(nums, l, m - 1);
+        int rmax = maxSubArrayHelp(nums, m + 1, r);
         for (int i = m - 1, sum = 0; i >= l; i--)
         {
             sum += nums[i];
