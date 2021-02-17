@@ -96,7 +96,7 @@ public:
 
     // 迭代算法
     // 利用栈做个迭代
-    // 主函数，在局部反复调用visitAlongLeftBranch历程
+    // 主函数，在局部反复调用visitAlongLeftBranch例程
     vector<int> preorderTraversal(TreeNode* root) {
         stack<TreeNode*> s;
         while(true)
@@ -157,7 +157,6 @@ public:
         }
     }
 
-    // void (*pvisit)(int)
     static void visit(int val, vector<int> &res_vect)
     {
         res_vect.push_back(val);
