@@ -140,7 +140,8 @@ public:
     {
         // 采用小顶堆来实现 也就是优先级队列
         // 默认是less比较，a<b true, 实现的是大顶堆，我们这里要用到小顶堆,a>b返回 true;
-        auto compare=[](ListNode* &a, ListNode* &b)
+        // Using lambda to compare elements.
+        auto compare=[](ListNode* a, ListNode* b)
         {
             return a->val > b->val;
         };
