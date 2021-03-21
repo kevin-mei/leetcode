@@ -56,11 +56,12 @@
  */
 
 // @lc code=start
+#include "pch.h"
+
 class Solution {
 public:
     bool divisorGame(int N) {
-        // f[i] 给定的数为i时，爱丽丝是否赢得比赛/ 一定有最优解
-        // 任何数都可以被1整除，只要爱丽丝收到的数>1,她就可以继续往下走
+        // f[i] 给定的数为i时，爱丽丝是否赢得比赛
         vector<bool> f(N+1, false);
         if(1 == N)
             return false;
@@ -71,6 +72,8 @@ public:
         // 4 可选1,2 选1留3给ball,return !f(3) = true
         // 5 可选1   选1留4给ball return !f(4) = false
         // 6 可选1，2，3，留5，4，3，留5，3当中任意一个，即可获胜，所以f(6) true
+        // 到这里，递推公式： f(i) = {!f(i-j)} (其中j是[0,i)之间可整除i的数)
+        // !f[i-j]有一个为true，则f(i)=true
         for(int i=2; i <= N; i++)
         {
             for(int j = 1; j < i; j++)
