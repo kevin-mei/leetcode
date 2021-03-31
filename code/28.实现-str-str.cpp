@@ -78,8 +78,42 @@ public:
     }
 
     // KMP算法
-    
+    int strStr(string haystack, string needle) {
+        if(""==needle) return 0;
+        vector<int> next = buildnext(needle);
+        int n = haystack.size(), i=0;
+        int m = needle.size(),j=0;
 
+        while(i<n && j <m)
+        {
+            if(j < 0 || haystack[i] == needle[j]) {i++;j++;}
+            else {j=next[j]; } // haystack不回退
+        }
+        // 当i-j大于n-m时，说明匹配位置比最后一个能匹配的下标还大，即匹配失败，返回-1
+        return i-j > n-m?-1:i-j; 
+    }
+
+    vector<int> buildnext(string needle)
+    {
+        int n = needle.size(), i = 0;
+        vector<int> next(n, 0);
+        int t = next[0] = -1;
+        while (i < n - 1 /*&& j < m*/)
+        {
+            if (t < 0 || needle[i] == needle[t])
+            {
+                //next[++i] = ++t; // 这里赋值的是needle[i+1] = 1+t; //改进前next数组
+                ++t;
+                ++i;
+                next[i] = needle[i] != needle[t] ? t : next[t]; // 改进后的next数组
+            }
+            else
+            {
+                t = next[t];
+            }
+        }
+        return next;
+    }
 };
 // @lc code=end
 
