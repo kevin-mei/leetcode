@@ -80,7 +80,7 @@
  * };
  */
 //#include "pch.h"
-class Solution {
+class Solution_1 {
 public:
     // 先递归求解
     // 二叉树的前序遍历
@@ -94,10 +94,24 @@ public:
         return res;
     }
 
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode*> s;
+        if(nullptr != root) s.push(root);
+        while(!s.empty())
+        {
+            TreeNode* curnode = s.top();s.pop();res.push_back(curnode->val);
+            if(nullptr != curnode->right) s.push(curnode->right);
+            if(nullptr != curnode->left) s.push(curnode->left);
+        }
+
+        return res;
+    }
+
     // 迭代算法
     // 利用栈做个迭代
     // 主函数，在局部反复调用visitAlongLeftBranch例程
-    vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> preorderTraversal_2(TreeNode* root) {
         stack<TreeNode*> s;
         while(true)
         {
@@ -163,6 +177,50 @@ public:
     }
 private:
     vector<int> res;
+};
+
+class Solution
+{
+public:
+    // void visitAlongLeftBranch(TreeNode* root, vector<int> &visit, stack<TreeNode*> &s)
+    // {
+    //     while(nullptr!=root)
+    //     {
+    //         // 访问当前节点
+    //         visit.push_back(root->val);
+    //         s.push(root->right); // 左子树入栈
+    //         root = root->left; // 沿着左侧链往下
+    //     }
+    // }
+
+    // vector<int> preorderTraversal(TreeNode* root) {
+    //     vector<int> res;
+    //     stack<TreeNode*> s;
+    //     if(nullptr != root) s.push(root);
+    //     while(!s.empty())
+    //     {
+    //         TreeNode* curnode = s.top();s.pop();
+    //         visitAlongLeftBranch(curnode, res, s);
+    //     }
+
+    //     return res;
+    // }
+
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> res;
+        helper(root, res);
+        return res;
+    }
+
+    void helper(TreeNode* root, vector<int> &visited)
+    {
+        if(nullptr == root)
+            return;
+        visited.push_back(root->val);
+        helper(root->left, visited);
+        helper(root->right, visited);
+    }
+
 };
 
 // // 函数指针版

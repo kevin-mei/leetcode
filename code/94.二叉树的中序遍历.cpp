@@ -80,7 +80,7 @@
  * };
  */
 //#include "pch.h"
-class Solution {
+class Solution_1 {
 public:
     // 递归版本
     vector<int> inorderTraversal_1(TreeNode* root) {
@@ -129,6 +129,50 @@ public:
     }
 private:
     vector<int> res;
+};
+
+
+class Solution
+{
+public:
+    // void goAlongLeftBranch(TreeNode* root, stack<TreeNode*> &s)
+    // {
+    // while(nullptr!=root)
+    // {
+    //     s.push(root); // 左子树入栈
+    //     root = root->left; // 沿着左侧链往下
+    // }
+    // }
+
+    // vector<int> inorderTraversal(TreeNode* root) {
+    //     vector<int> res;
+    //     stack<TreeNode*> s;
+    //     goAlongLeftBranch(root, s); // 先把根结点的左侧链放入栈中
+    //     while(!s.empty())
+    //     {
+    //         // 此时拿到的是最远端的左侧链节点
+    //         TreeNode* curnode = s.top();s.pop(); 
+    //         res.push_back(curnode->val);//访问当前节点
+    //         if(nullptr != curnode->right) 
+    //         goAlongLeftBranch(curnode->right, s);// 将控制权交给最远端左侧链节点的右子树
+    //     }
+
+    //     return res;
+    // }
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        helper(root, res);
+        return res;
+    }
+
+    void helper(TreeNode *root, vector<int> &visited)
+    {
+        if (nullptr == root)
+            return;
+        helper(root->left, visited);
+        visited.push_back(root->val);
+        helper(root->right, visited);
+    }
 };
 // @lc code=end
 
