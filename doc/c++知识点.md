@@ -30,3 +30,64 @@
    else 
     //小端存储
    ```
+5. c++的struct和class的区别
+   两个都可以拥有成员函数，公有和私有部分
+   任何可以用class完成的共奏，同样可以用struct完成
+
+struct 的默认成员函数是公有的；class的默认成员函数是私有的；
+
+c++和c struct的区别
+c语言中：struct是用户自定义数据类型(UDT)；c++中struct是抽象数据类型(ADT)，
+支持成员函数的定义，c++中的struct能继承，能实现多态；
+
+c中的struct是没有权限设置的，且struct中只能是一些遍历的集合体，可以封装数据却不可以隐藏数据，
+而且成员不可以是函数；
+
+c中的struct声明后，使用的时候，需要在结构标记前加上struct，才能做结构类型明(除：typedef struct class{})；
+
+柔性数组  是否可以考虑用protobuf替换
+```c++
+// 定长缓冲区
+struct max_buffer
+{
+   int len;
+   char data[MAX_LENGTH];
+};
+```
+sizeof(max_buffer) > sizeof(int) + sizeof(char) *MAX_LENGTH;
+为了防止数据溢出的情况，data的长度一般会设置得足够大，但也正因为这样，才导致数组的冗余；
+
+避免数据的浪费：
+```c++
+struct point_buffer
+{
+    int   len;
+    char  *data;
+};
+// 数据
+// 内存申请：
+if ((p_buffer = (struct point_buffer *)malloc(sizeof(struct point_buffer))) != NULL)
+{
+    p_buffer->len = CUR_LENGTH;
+    if ((p_buffer->data = (char *)malloc(sizeof(char) * CUR_LENGTH)) != NULL)
+    {
+        memcpy(p_buffer->data, "point_buffer test", CUR_LENGTH);
+        printf("%d, %s\n", p_buffer->len, p_buffer->data);
+    }
+}
+// 内存释放
+free(p_buffer->data);
+free(p_buffer);
+p_buffer = NULL;
+```
+虽然这样能够节约内存，但是两次分配的内存是不连续的，需要分别对其进行管理
+
+柔性数组，柔性数组成员(flexible array member)也叫伸缩性数组成员，它必须是数组的最后一个成员；
+
+```c++
+struct test
+{
+   short len;// 必须至少有一个其它成员
+   char arr[];// 柔性数组必须是结构体的最后一个成员(也可以是其它类型，int,double)
+};
+```
